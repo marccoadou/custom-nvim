@@ -19,6 +19,7 @@ return {
             formatters_by_ft = {
             }
         })
+
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
         local capabilities = vim.tbl_deep_extend(
@@ -56,36 +57,58 @@ return {
                     })
                     vim.g.zig_fmt_parse_errors = 0
                     vim.g.zig_fmt_autosave = 0
-
-                    local function on_attach(client, bufnr)
-                        -- Helper function for setting key mappings
-                        local function buf_set_keymap(...)
-                            vim.api.nvim_buf_set_keymap(bufnr, ...)
-                        end
-
-                        -- Options for mappings
-                        local opts = { noremap = true, silent = true }
-
-                        -- Mappings
-                        buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-                        buf_set_keymap('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)
-                        buf_set_keymap('n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-                        buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-                        buf_set_keymap('n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts)
-                        buf_set_keymap('n', '<leader>ca', '<Cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-                        buf_set_keymap('n', '<leader>f', '<Cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-                        buf_set_keymap('n', '<leader>e', '<Cmd>lua vim.diagnostic.open_float()<CR>', opts)
-                        buf_set_keymap('n', '[d', '<Cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-                        buf_set_keymap('n', ']d', '<Cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-
-                    end
-
-                    lspconfig.intelephense.setup({
-                        on_attach = on_attach,
-                    })
-
                 end,
-                ["lua_ls"] = function()
+
+                intelephense = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.intelephense.setup({
+                        on_attach = function(client, bufnr)
+                            -- Helper function for setting key mappings
+                            local function buf_set_keymap(...)
+                                vim.api.nvim_buf_set_keymap(bufnr, ...)
+                            end
+
+                            -- Options for mappings
+                            local opts = { noremap = true, silent = true }
+
+                            -- Mappings
+                            buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+                            buf_set_keymap('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)
+                            buf_set_keymap('n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+                            buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+                            buf_set_keymap('n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts)
+                            buf_set_keymap('n', '<leader>ca', '<Cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+                            buf_set_keymap('n', '<leader>f', '<Cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+                            buf_set_keymap('n', '<leader>e', '<Cmd>lua vim.diagnostic.open_float()<CR>', opts)
+                            buf_set_keymap('n', '[d', '<Cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+                            buf_set_keymap('n', ']d', '<Cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+
+                            -- Formatting shortcut
+                            if client.server_capabilities.documentFormattingProvider then
+                                buf_set_keymap('n', '<leader>F', '<Cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+                            end
+                        end,
+                        capabilities = capabilities,
+                        settings = {
+                            intelephense = {
+                                files = {
+                                    maxSize = 5000000,
+                                },
+                                environment = {
+                                    phpVersion = "8.1",
+                                },
+                                diagnostics = {
+                                    enable = true,
+                                },
+                                completion = {
+                                    fullyQualifyGlobalConstantsAndFunctions = true,
+                                },
+                            },
+                        },
+                    })
+                end,
+
+                lua_ls = function()
                     local lspconfig = require("lspconfig")
                     lspconfig.lua_ls.setup {
                         capabilities = capabilities,
@@ -137,3 +160,4 @@ return {
         })
     end
 }
+
