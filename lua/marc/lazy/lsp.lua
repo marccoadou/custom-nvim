@@ -87,6 +87,8 @@ return {
                             if client.server_capabilities.documentFormattingProvider then
                                 buf_set_keymap('n', '<leader>F', '<Cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
                             end
+
+                            buf_set_keymap('n', '<leader>d', '<Cmd>lua vim.lsp.buf.code_action()<CR>', opts)
                         end,
                         capabilities = capabilities,
                         settings = {
@@ -95,7 +97,7 @@ return {
                                     maxSize = 5000000,
                                 },
                                 environment = {
-                                    phpVersion = "8.1",
+                                    phpVersion = "8.3",
                                 },
                                 diagnostics = {
                                     enable = true,
@@ -103,6 +105,7 @@ return {
                                 completion = {
                                     fullyQualifyGlobalConstantsAndFunctions = true,
                                 },
+
                             },
                         },
                     })
