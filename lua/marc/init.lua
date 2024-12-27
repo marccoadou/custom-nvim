@@ -5,7 +5,7 @@ vim.cmd("colorscheme catppuccin")
 
 -- Format on save using pint
 vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*.php",
+    pattern = { "*.php", " *.rs" } ,
     callback = function()
         vim.cmd("FormatWrite")
     end,

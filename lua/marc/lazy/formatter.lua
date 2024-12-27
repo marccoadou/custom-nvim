@@ -13,6 +13,24 @@ return {
                         }
                     end,
                 },
+                rust = {
+                    function ()
+                        return {
+                            exe = "rustfmt",
+                            args ={ "--emit=stdout" },
+                            stdin = true,
+                        }
+                    end
+                },
+                -- lua = {
+                --     function ()
+                --         return {
+                --             exe = "lua-format",
+                --             args = { "--indent-width=2", "--column-limit=80" },
+                --             stdin = true,
+                --         }
+                --     end
+                -- }
             },
         })
     end,
