@@ -1,7 +1,7 @@
 require("marc.remap")
 require("marc.lazy_init")
 require("marc.set")
-vim.cmd("colorscheme catppuccin")
+vim.cmd("colorscheme tokyonight")
 
 -- Format on save using pint
 vim.api.nvim_create_autocmd("BufWritePre", {

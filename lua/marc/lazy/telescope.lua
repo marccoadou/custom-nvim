@@ -4,7 +4,8 @@ return {
     tag = "0.1.5",
 
     dependencies = {
-        "nvim-lua/plenary.nvim"
+        "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope-live-grep-args.nvim",
     },
 
     config = function()
@@ -13,7 +14,7 @@ return {
                 vimgrep_arguments = {
                     '--hidden'
                 }
-            }
+            },
         })
 
         local builtin = require('telescope.builtin')
